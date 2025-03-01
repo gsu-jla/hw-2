@@ -25,12 +25,42 @@ class _CalculatorScreenState extends State<CalculatorScreen> {
   double _num2 = 0;
   String _operator = "";
 
-
+  void _onPressed(String value) {  //button logic
+    setState(() {
+      if (value == "C") {  // clears and zeros out values
+        _input = "";
+        _output = "0";
+        _num1 = 0;
+        _num2 = 0;
+        _operator = "";
+      } else if (value == "=") {  // starts the handling of operator logic after '=' is pressed
+        _num2 = double.parse(_input);
+        if (_operator == "+") {
+          _output = (_num1 + _num2).toString();
+        } else if (_operator == "-") {
+          _output = (_num1 - _num2).toString();
+        } else if (_operator == "*") {
+          _output = (_num1 * _num2).toString();
+        } else if (_operator == "/") {
+          _output = (_num1 / _num2).toString();
+        }
+        _input = _output;
+        _operator = "";
+      } else if (value == "+" || value == "-" || value == "*" || value == "/") {  // stores operator
+        _num1 = double.parse(_input);
+        _operator = value;
+        _input = "";
+      } else {
+        _input += value;
+        _output = _input;
+      }
+    });
+  }
 
   Widget _buildButton(String text) {  // construction of base button widget
     return Expanded(
       child: ElevatedButton(
-        onPressed: () => (text),
+        onPressed: () => _onPressed(text),
         child: Text(text, style: TextStyle(fontSize: 24)),
       ),
     );
